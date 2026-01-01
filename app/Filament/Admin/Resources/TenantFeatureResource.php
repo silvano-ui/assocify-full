@@ -84,6 +84,8 @@ class TenantFeatureResource extends Resource
                     'trial' => 'warning',
                     'gift' => 'info',
                     'custom' => 'danger',
+                    'system' => 'primary',
+                    default => 'gray',
                 }),
                 IconColumn::make('enabled')->boolean(),
                 TextColumn::make('limit_value'),
