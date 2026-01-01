@@ -14,6 +14,13 @@ class WhiteLabelServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Modules\WhiteLabel\Console\TestWhmcsConnection::class,
+                \Modules\WhiteLabel\Console\CheckDomainAvailability::class,
+            ]);
+        }
     }
 
     public function register(): void
