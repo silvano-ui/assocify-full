@@ -34,6 +34,8 @@ class DashboardPanelProvider extends PanelProvider
             ->resources([
                 \Modules\Members\Filament\Resources\MemberProfileResource::class,
                 \Modules\Members\Filament\Resources\MemberCategoryResource::class,
+                \Modules\Events\Filament\Resources\EventCategoryResource::class,
+                \Modules\Events\Filament\Resources\EventResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([
