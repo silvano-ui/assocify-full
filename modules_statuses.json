@@ -6,5 +6,6 @@
     "Gallery": true,
     "Documents": true,
     "Newsletter": true,
-    "Api": true
+    "Api": true,
+    "WhiteLabel": true
 }

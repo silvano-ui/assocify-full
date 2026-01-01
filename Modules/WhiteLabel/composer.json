@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/whitelabel",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\WhiteLabel\\": "app/",
+            "Modules\\WhiteLabel\\Database\\Factories\\": "database/factories/",
+            "Modules\\WhiteLabel\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\WhiteLabel\\Tests\\": "tests/"
+        }
+    }
+}
