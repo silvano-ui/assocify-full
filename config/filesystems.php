@@ -84,6 +84,7 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
         public_path('storage/chat') => storage_path('app/public/chat'),
+        public_path('storage/gallery') => storage_path('app/public/gallery'),
     ],
 
 ];

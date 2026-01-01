@@ -2,5 +2,6 @@
     "Members": true,
     "Events": true,
     "Payments": true,
-    "Chat": true
+    "Chat": true,
+    "Gallery": true
 }

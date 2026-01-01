@@ -38,8 +38,11 @@ class Conversation extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
-            if (auth()->check() && auth()->user()->tenant_id) {
-                $model->tenant_id = auth()->user()->tenant_id;
+            if (auth()->check()) {
+                if (auth()->user()->tenant_id) {
+                    $model->tenant_id = auth()->user()->tenant_id;
+                }
+                $model->created_by = auth()->id();
             }
         });
 

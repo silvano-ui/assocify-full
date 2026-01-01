@@ -44,10 +44,18 @@ class DashboardPanelProvider extends PanelProvider
                 \Modules\Chat\Filament\Resources\MessageResource::class,
                 \Modules\Chat\Filament\Resources\SavedMessageResource::class,
                 \Modules\Chat\Filament\Resources\ChatHashtagResource::class,
+                \Modules\Gallery\Filament\Resources\AlbumResource::class,
+                \Modules\Gallery\Filament\Resources\CustomGroupResource::class,
+                \Modules\Gallery\Filament\Resources\MediaResource::class,
+                \Modules\Gallery\Filament\Resources\MediaTagResource::class,
+                \Modules\Gallery\Filament\Resources\MediaCommentResource::class,
+                \Modules\Gallery\Filament\Resources\CollectionResource::class,
+                \Modules\Gallery\Filament\Resources\SlideshowResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([
                 Dashboard::class,
+                \Modules\Gallery\Filament\Pages\WatermarkSettingsPage::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Dashboard/Widgets'), for: 'App\Filament\Dashboard\Widgets')
             ->widgets([
