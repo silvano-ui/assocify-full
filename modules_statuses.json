@@ -5,5 +5,6 @@
     "Chat": true,
     "Gallery": true,
     "Documents": true,
-    "Newsletter": true
+    "Newsletter": true,
+    "Api": true
 }
