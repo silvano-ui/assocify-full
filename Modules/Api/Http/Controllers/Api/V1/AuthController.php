@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Core\Users\User;
 
-class AuthController extends BaseController
+class AuthController extends BaseApiController
 {
     public function login(Request $request)
     {
@@ -41,8 +41,6 @@ class AuthController extends BaseController
 
     public function refresh(Request $request)
     {
-        // For Sanctum, "refresh" is usually creating a new token and deleting the old one
-        // or just issuing a new one. Here we'll just issue a new one.
         $user = $request->user();
         $request->user()->currentAccessToken()->delete();
         $token = $user->createToken('api_token')->plainTextToken;

@@ -31,6 +31,8 @@ class ApiServiceProvider extends ServiceProvider
         $router = $this->app['router'];
         $router->aliasMiddleware('api.key', \Modules\Api\Http\Middleware\ValidateApiKey::class);
         $router->aliasMiddleware('api.scope', \Modules\Api\Http\Middleware\CheckApiScope::class);
+        $router->aliasMiddleware('api.rate', \Modules\Api\Http\Middleware\ApiRateLimiter::class);
+        $router->aliasMiddleware('api.log', \Modules\Api\Http\Middleware\LogApiRequest::class);
     }
 
     /**
