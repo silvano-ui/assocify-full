@@ -32,10 +32,14 @@ class ApiKeyResource extends Resource
 
     public static function canViewAny(): bool
     {
-        if (!auth()->check()) {
-            return false;
-        }
-        return has_feature('api.access');
+        $user = auth()->user();
+        if (!$user) return false;
+        
+        // SuperAdmin (no tenant_id) always has access
+        if (!$user->tenant_id) return true;
+        
+        // Tenant users need api.access feature
+        return function_exists('has_feature') && has_feature('api.access');
     }
 
     public static function form(Schema $schema): Schema

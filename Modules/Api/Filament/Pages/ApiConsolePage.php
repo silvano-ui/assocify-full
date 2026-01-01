@@ -27,11 +27,17 @@ class ApiConsolePage extends Page implements HasForms
 
     public static function canAccess(): bool
     {
-        if (!auth()->check()) {
-            return false;
-        }
-        return has_feature('api.access');
+        $user = auth()->user();
+        if (!$user) return false;
+        
+        // SuperAdmin always has access
+        if (!$user->tenant_id) return true;
+        
+        // Tenant users need api.access feature
+        return function_exists('has_feature') && has_feature('api.access');
     }
+
+
 
     public ?array $data = [];
     public ?string $response = null;
