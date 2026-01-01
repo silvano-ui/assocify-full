@@ -60,6 +60,14 @@ return [
             'report' => false,
         ],
 
+        'chat' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/chat'),
+            'url' => env('APP_URL').'/storage/chat',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
     ],
 
     /*
@@ -75,6 +83,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('storage/chat') => storage_path('app/public/chat'),
     ],
 
 ];

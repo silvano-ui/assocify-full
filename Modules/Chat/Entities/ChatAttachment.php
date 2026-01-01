@@ -1,45 +1,39 @@
 <?php
 
-namespace Modules\Payments\Entities;
+namespace Modules\Chat\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Core\Users\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Invoice extends Model
+class ChatAttachment extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'message_id',
         'tenant_id',
         'user_id',
-        'number',
         'type',
-        'items',
-        'subtotal',
-        'tax_rate',
-        'tax',
-        'total',
-        'notes',
-        'status',
-        'due_date',
-        'paid_at',
+        'original_name',
+        'file_path',
+        'file_size',
+        'mime_type',
+        'width',
+        'height',
+        'duration',
+        'thumbnail_path',
+        'waveform',
     ];
 
     protected $casts = [
-        'items' => 'json',
-        'due_date' => 'date',
-        'paid_at' => 'datetime',
-        'subtotal' => 'decimal:2',
-        'tax_rate' => 'decimal:2',
-        'tax' => 'decimal:2',
-        'total' => 'decimal:2',
+        'file_size' => 'integer',
+        'width' => 'integer',
+        'height' => 'integer',
+        'duration' => 'integer',
+        'waveform' => 'json',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     protected static function booted(): void
     {
@@ -54,5 +48,15 @@ class Invoice extends Model
                 $query->where('tenant_id', auth()->user()->tenant_id);
             }
         });
+    }
+
+    public function message(): BelongsTo
+    {
+        return $this->belongsTo(Message::class);
+    }
+
+    public function uploader(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

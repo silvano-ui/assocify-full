@@ -1,5 +1,6 @@
 {
     "Members": true,
     "Events": true,
-    "Payments": true
+    "Payments": true,
+    "Chat": true
 }

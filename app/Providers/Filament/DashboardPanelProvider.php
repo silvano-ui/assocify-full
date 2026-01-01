@@ -40,6 +40,10 @@ class DashboardPanelProvider extends PanelProvider
                 \Modules\Payments\Filament\Resources\TransactionResource::class,
                 \Modules\Payments\Filament\Resources\PaymentMethodResource::class,
                 \Modules\Payments\Filament\Resources\SubscriptionRenewalResource::class,
+                \Modules\Chat\Filament\Resources\ConversationResource::class,
+                \Modules\Chat\Filament\Resources\MessageResource::class,
+                \Modules\Chat\Filament\Resources\SavedMessageResource::class,
+                \Modules\Chat\Filament\Resources\ChatHashtagResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([

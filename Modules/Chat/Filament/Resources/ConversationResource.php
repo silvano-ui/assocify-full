@@ -1,27 +1,27 @@
 <?php
 
-namespace Modules\Payments\Filament\Resources;
+namespace Modules\Chat\Filament\Resources;
 
-use Modules\Payments\Filament\Resources\PaymentMethodResource\Pages;
-use Modules\Payments\Entities\PaymentMethod;
+use Modules\Chat\Filament\Resources\ConversationResource\Pages;
+use Modules\Chat\Entities\Conversation;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class PaymentMethodResource extends Resource
+class ConversationResource extends Resource
 {
-    protected static ?string $model = PaymentMethod::class;
+    protected static ?string $model = Conversation::class;
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-credit-card';
+        return 'heroicon-o-chat-bubble-left-right';
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return 'Payments';
+        return 'Chat';
     }
 
     public static function canViewAny(): bool
@@ -35,23 +35,18 @@ class PaymentMethodResource extends Resource
             ->components([
                 Forms\Components\Select::make('type')
                     ->options([
-                        'stripe' => 'Stripe',
-                        'paypal' => 'PayPal',
-                        'bank_transfer' => 'Bank Transfer',
-                        'cash' => 'Cash',
-                        'manual' => 'Manual',
+                        'direct' => 'Direct Message',
+                        'group' => 'Group Chat',
+                        'channel' => 'Channel',
                     ])
                     ->required(),
                 Forms\Components\TextInput::make('name')
-                    ->required()
                     ->maxLength(255),
-                Forms\Components\KeyValue::make('credentials')
-                    ->label('Credentials (JSON/Key-Value)'),
-                Forms\Components\Toggle::make('is_active')
+                Forms\Components\Textarea::make('description'),
+                Forms\Components\Toggle::make('is_private')
                     ->default(true),
-                Forms\Components\Toggle::make('is_default')
+                Forms\Components\Toggle::make('is_archived')
                     ->default(false),
-                Forms\Components\KeyValue::make('settings'),
             ]);
     }
 
@@ -61,8 +56,8 @@ class PaymentMethodResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\IconColumn::make('is_active')->boolean(),
-                Tables\Columns\IconColumn::make('is_default')->boolean(),
+                Tables\Columns\IconColumn::make('is_private')->boolean(),
+                Tables\Columns\TextColumn::make('last_message_at')->dateTime(),
             ])
             ->filters([
                 //
@@ -80,9 +75,9 @@ class PaymentMethodResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPaymentMethods::route('/'),
-            'create' => Pages\CreatePaymentMethod::route('/create'),
-            'edit' => Pages\EditPaymentMethod::route('/{record}/edit'),
+            'index' => Pages\ListConversations::route('/'),
+            'create' => Pages\CreateConversation::route('/create'),
+            'edit' => Pages\EditConversation::route('/{record}/edit'),
         ];
     }
 }
