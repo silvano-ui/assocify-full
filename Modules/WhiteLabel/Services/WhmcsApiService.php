@@ -98,4 +98,60 @@ class WhmcsApiService
     {
         return $this->makeApiCall('GetDomainInfo', ['domain' => $domain]);
     }
+
+    public function getDomainNameservers(string $domain): array
+    {
+        return $this->makeApiCall('DomainGetNameservers', ['domain' => $domain]);
+    }
+
+    public function updateDomainNameservers(string $domain, array $nameservers): array
+    {
+        $params = ['domain' => $domain];
+        foreach ($nameservers as $i => $ns) {
+            $params['ns' . ($i + 1)] = $ns;
+        }
+        return $this->makeApiCall('DomainUpdateNameservers', $params);
+    }
+
+    public function getClients(string $search = ''): array
+    {
+        $params = [];
+        if ($search) {
+            $params['search'] = $search;
+        }
+        return $this->makeApiCall('GetClients', $params);
+    }
+
+    public function getClientDetails(int $clientId): array
+    {
+        return $this->makeApiCall('GetClientsDetails', ['clientid' => $clientId]);
+    }
+
+    public function createClient(array $data): array
+    {
+        return $this->makeApiCall('AddClient', [
+            'firstname' => $data['first_name'] ?? '',
+            'lastname' => $data['last_name'] ?? '',
+            'email' => $data['email'] ?? '',
+            'address1' => $data['address'] ?? '',
+            'city' => $data['city'] ?? '',
+            'state' => $data['state'] ?? '',
+            'postcode' => $data['postcode'] ?? '',
+            'country' => $data['country'] ?? 'IT',
+            'phonenumber' => $data['phone'] ?? '',
+            'password2' => $data['password'] ?? \Illuminate\Support\Str::random(12),
+        ]);
+    }
+
+    public function getClientDomains(int $clientId): array
+    {
+        return $this->makeApiCall('GetClientsDomains', ['clientid' => $clientId]);
+    }
+
+    public function getTldPricing(): array
+    {
+        return Cache::remember('whmcs_tld_pricing', 3600, function () {
+            return $this->makeApiCall('GetTLDPricing');
+        });
+    }
 }
