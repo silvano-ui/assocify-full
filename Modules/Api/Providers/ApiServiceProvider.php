@@ -27,6 +27,10 @@ class ApiServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+
+        $router = $this->app['router'];
+        $router->aliasMiddleware('api.key', \Modules\Api\Http\Middleware\ValidateApiKey::class);
+        $router->aliasMiddleware('api.scope', \Modules\Api\Http\Middleware\CheckApiScope::class);
     }
 
     /**

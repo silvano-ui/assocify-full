@@ -56,11 +56,19 @@ class DashboardPanelProvider extends PanelProvider
                 \Modules\Newsletter\Filament\Resources\NewsletterCampaignResource::class,
                 \Modules\Newsletter\Filament\Resources\NewsletterAutomationResource::class,
                 \Modules\Newsletter\Filament\Resources\NewsletterSubscriberResource::class,
+                \Modules\Api\Filament\Resources\ApiKeyResource::class,
+                \Modules\Api\Filament\Resources\ApiWebhookResource::class,
+                \Modules\Api\Filament\Resources\ApiRequestLogResource::class,
+                \Modules\Api\Filament\Resources\ApiSecurityEventResource::class,
+                \Modules\Api\Filament\Resources\ApiOauthClientResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([
                 Dashboard::class,
                 \Modules\Gallery\Filament\Pages\WatermarkSettingsPage::class,
+                \Modules\Api\Filament\Pages\ApiAnalyticsPage::class,
+                \Modules\Api\Filament\Pages\ApiDocumentationPage::class,
+                \Modules\Api\Filament\Pages\ApiConsolePage::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Dashboard/Widgets'), for: 'App\Filament\Dashboard\Widgets')
             ->widgets([
