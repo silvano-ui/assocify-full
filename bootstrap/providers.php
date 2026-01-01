@@ -5,4 +5,5 @@ return [
     App\Providers\Filament\AdminPanelProvider::class,
     App\Providers\Filament\DashboardPanelProvider::class,
     App\Providers\FeatureServiceProvider::class,
+    App\Providers\PermissionServiceProvider::class,
 ];
