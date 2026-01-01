@@ -5,6 +5,10 @@ use Modules\Api\Http\Controllers\Api\V1\AuthController;
 use Modules\Api\Http\Controllers\Api\V1\MembersController;
 use Modules\Api\Http\Controllers\Api\V1\EventsController;
 use Modules\Api\Http\Controllers\Api\V1\PaymentsController;
+use Modules\Api\Http\Controllers\Api\V1\DocumentsController;
+use Modules\Api\Http\Controllers\Api\V1\GalleryController;
+use Modules\Api\Http\Controllers\Api\V1\ChatController;
+use Modules\Api\Http\Controllers\Api\V1\NewsletterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +44,29 @@ Route::prefix('v1')->middleware(['api.key', 'api.rate', 'api.log'])->group(funct
     Route::get('invoices/{id}', [PaymentsController::class, 'invoice']);
     Route::get('invoices/{id}/pdf', [PaymentsController::class, 'invoicePdf']);
     Route::apiResource('payments', PaymentsController::class)->only(['index', 'show', 'store']);
+
+    // Documents
+    Route::get('documents/categories', [DocumentsController::class, 'categories']);
+    Route::get('documents/{id}/download', [DocumentsController::class, 'download']);
+    Route::apiResource('documents', DocumentsController::class);
+
+    // Gallery
+    Route::apiResource('albums', GalleryController::class)->only(['index', 'show']);
+    // Media routes manually defined to avoid conflict in controller if using same controller for two resources
+    Route::get('media', [GalleryController::class, 'mediaIndex']);
+    Route::get('media/{id}', [GalleryController::class, 'mediaShow']);
+    Route::post('media', [GalleryController::class, 'mediaStore']);
+    Route::delete('media/{id}', [GalleryController::class, 'mediaDestroy']);
+
+    // Chat
+    Route::get('conversations', [ChatController::class, 'index']);
+    Route::get('conversations/{id}/messages', [ChatController::class, 'messages']);
+    Route::post('conversations/{id}/messages', [ChatController::class, 'sendMessage']);
+    Route::post('conversations', [ChatController::class, 'store']);
+
+    // Newsletter
+    Route::get('newsletter/lists', [NewsletterController::class, 'lists']);
+    Route::get('newsletter/subscribers', [NewsletterController::class, 'subscribers']);
+    Route::post('newsletter/subscribe', [NewsletterController::class, 'subscribe']);
+    Route::post('newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe']);
 });

@@ -1,0 +1,111 @@
+openapi: 3.0.0
+info:
+  title: Assocify API
+  description: REST API for Assocify Platform
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: V1 API
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    Member:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+    Event:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        starts_at:
+          type: string
+          format: date-time
+    Document:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        file_name:
+          type: string
+    Album:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+  /members:
+    get:
+      summary: List members
+      responses:
+        '200':
+          description: List of members
+    post:
+      summary: Create member
+      responses:
+        '201':
+          description: Member created
+  /events:
+    get:
+      summary: List events
+      responses:
+        '200':
+          description: List of events
+  /documents:
+    get:
+      summary: List documents
+      responses:
+        '200':
+          description: List of documents
+  /albums:
+    get:
+      summary: List albums
+      responses:
+        '200':
+          description: List of albums
+  /conversations:
+    get:
+      summary: List conversations
+      responses:
+        '200':
+          description: List of conversations
