@@ -7,7 +7,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
-use Filament\Forms\Form;
 use Filament\Forms;
 use Modules\Gallery\Entities\WatermarkSetting;
 
@@ -49,10 +48,10 @@ class WatermarkSettingsPage extends Page implements HasForms
         }
     }
 
-    public function form(Form $form): Form
+    public function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\Section::make('Watermark Configuration')
                     ->schema([
                         Forms\Components\Toggle::make('enabled')
@@ -107,8 +106,7 @@ class WatermarkSettingsPage extends Page implements HasForms
                                     ->default(20),
                             ]),
                     ])
-            ])
-            ->statePath('data');
+            ]);
     }
 
     public function save(): void
