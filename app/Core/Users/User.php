@@ -8,8 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Core\Tenant\Tenant;
+use App\Core\Permissions\TenantRole;
+use App\Core\Permissions\UserTenantRole;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 
@@ -57,6 +60,18 @@ class User extends Authenticatable implements FilamentUser
     public function socialAccounts(): HasMany
     {
         return $this->hasMany(UserSocialAccount::class);
+    }
+
+    public function userRoles(): HasMany
+    {
+        return $this->hasMany(UserTenantRole::class);
+    }
+
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(TenantRole::class, 'user_tenant_roles', 'user_id', 'tenant_role_id')
+            ->withPivot('assigned_by', 'assigned_at', 'expires_at', 'is_primary')
+            ->withTimestamps();
     }
 
     public function canAccessPanel(Panel $panel): bool
