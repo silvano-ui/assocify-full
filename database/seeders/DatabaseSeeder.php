@@ -80,5 +80,20 @@ class DatabaseSeeder extends Seeder
             'tenant_id' => $tenant->id,
             'email_verified_at' => now(),
         ]);
+
+        // 5. Enable Modules for Tenant
+        \App\Core\Tenant\TenantModule::create([
+            'tenant_id' => $tenant->id,
+            'module_slug' => 'members',
+            'enabled' => true,
+            'enabled_at' => now(),
+        ]);
+
+        \App\Core\Tenant\TenantModule::create([
+            'tenant_id' => $tenant->id,
+            'module_slug' => 'events',
+            'enabled' => true,
+            'enabled_at' => now(),
+        ]);
     }
 }
