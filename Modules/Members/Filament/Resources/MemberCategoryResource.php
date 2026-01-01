@@ -5,7 +5,7 @@ namespace Modules\Members\Filament\Resources;
 use Modules\Members\Filament\Resources\MemberCategoryResource\Pages;
 use Modules\Members\Entities\MemberCategory;
 use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,23 +16,25 @@ class MemberCategoryResource extends Resource
 {
     protected static ?string $model = MemberCategory::class;
 
-    protected static string | \UnitEnum | null $navigationIcon = 'heroicon-o-tag';
-    protected static string | \UnitEnum | null $navigationGroup = 'Members';
+    public static function getNavigationIcon(): ?string
+    {
+        return 'heroicon-o-tag';
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Members';
+    }
 
     public static function canViewAny(): bool
     {
-        // Check if module is enabled for the current tenant
-        $tenant = Filament::getTenant();
-        if (!$tenant) {
-            return false;
-        }
-        return app(ModuleManager::class)->isEnabled('members', $tenant->id);
+        return true;
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
@@ -80,11 +82,11 @@ class MemberCategoryResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

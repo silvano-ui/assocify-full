@@ -18,6 +18,22 @@ class MemberProfile extends Model
         'custom_fields' => 'array',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function ($model) {
+            if (auth()->check() && auth()->user()->tenant_id) {
+                $model->tenant_id = auth()->user()->tenant_id;
+            }
+        });
+
+        // Global scope per filtrare per tenant
+        static::addGlobalScope('tenant', function ($query) {
+            if (auth()->check() && auth()->user()->tenant_id) {
+                $query->where('tenant_id', auth()->user()->tenant_id);
+            }
+        });
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
