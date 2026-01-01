@@ -51,6 +51,11 @@ class DashboardPanelProvider extends PanelProvider
                 \Modules\Gallery\Filament\Resources\MediaCommentResource::class,
                 \Modules\Gallery\Filament\Resources\CollectionResource::class,
                 \Modules\Gallery\Filament\Resources\SlideshowResource::class,
+                \Modules\Newsletter\Filament\Resources\NewsletterListResource::class,
+                \Modules\Newsletter\Filament\Resources\NewsletterTemplateResource::class,
+                \Modules\Newsletter\Filament\Resources\NewsletterCampaignResource::class,
+                \Modules\Newsletter\Filament\Resources\NewsletterAutomationResource::class,
+                \Modules\Newsletter\Filament\Resources\NewsletterSubscriberResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([
