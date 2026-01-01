@@ -19,9 +19,9 @@ class TenantDomainResource extends Resource
 {
     protected static ?string $model = TenantDomain::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-server';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-server';
 
-    protected static ?string $navigationGroup = 'White Label';
+    protected static string | \UnitEnum | null $navigationGroup = 'White Label';
 
     public static function canViewAny(): bool
     {
@@ -35,7 +35,7 @@ class TenantDomainResource extends Resource
         return function_exists('has_feature') && (has_feature('whitelabel.basic') || has_feature('whitelabel.full'));
     }
 
-    public static function form(Schema $schema): Schema
+    public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
         return $schema
             ->components([
@@ -63,7 +63,7 @@ class TenantDomainResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Actions\EditAction::make(),
                 Action::make('verify')
                     ->label('Verify')
                     ->icon('heroicon-o-check-circle')
@@ -79,7 +79,7 @@ class TenantDomainResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\DeleteBulkAction::make(),
             ]);
     }
 

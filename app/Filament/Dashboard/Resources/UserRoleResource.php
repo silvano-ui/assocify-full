@@ -30,7 +30,7 @@ class UserRoleResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->where('tenant_id', auth()->user()->tenant_id);
+            ->where('users.tenant_id', auth()->user()->tenant_id);
     }
 
     public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
@@ -43,7 +43,7 @@ class UserRoleResource extends Resource
                     ->disabled(),
                 CheckboxList::make('roles')
                     ->relationship('roles', 'name', function (Builder $query) {
-                        return $query->where('tenant_id', auth()->user()->tenant_id);
+                        return $query->where('tenant_roles.tenant_id', auth()->user()->tenant_id);
                     })
                     ->label('Assigned Roles')
                     ->columns(2)
@@ -69,7 +69,7 @@ class UserRoleResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('roles')
                     ->relationship('roles', 'name', function (Builder $query) {
-                         return $query->where('tenant_id', auth()->user()->tenant_id);
+                         return $query->where('tenant_roles.tenant_id', auth()->user()->tenant_id);
                     }),
             ])
             ->actions([

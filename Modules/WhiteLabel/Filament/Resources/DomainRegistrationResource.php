@@ -22,9 +22,9 @@ class DomainRegistrationResource extends Resource
 {
     protected static ?string $model = DomainRegistration::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-globe-alt';
 
-    protected static ?string $navigationGroup = 'White Label';
+    protected static string | \UnitEnum | null $navigationGroup = 'White Label';
 
     public static function canViewAny(): bool
     {
@@ -38,7 +38,7 @@ class DomainRegistrationResource extends Resource
         return function_exists('has_feature') && (has_feature('whitelabel.basic') || has_feature('whitelabel.full'));
     }
 
-    public static function form(Schema $schema): Schema
+    public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
         return $schema
             ->components([
@@ -83,7 +83,7 @@ class DomainRegistrationResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Actions\EditAction::make(),
                 Action::make('renew')
                     ->label('Renew')
                     ->icon('heroicon-o-refresh')

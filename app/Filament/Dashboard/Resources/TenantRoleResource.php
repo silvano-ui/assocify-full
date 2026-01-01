@@ -67,37 +67,17 @@ class TenantRoleResource extends Resource
                     ->default(0),
                 Toggle::make('is_default'),
                 
-                Group::make()
-                    ->schema(function () {
-                        $modules = Permission::distinct()->pluck('module')->toArray();
-                        $schema = [];
-                        
-                        foreach ($modules as $module) {
-                            $schema[] = CheckboxList::make("permissions_module_{$module}")
-                                ->label(ucfirst($module) . ' Permissions')
-                                ->options(
-                                    Permission::where('module', $module)
-                                        ->pluck('name', 'slug')
-                                )
-                                ->default([])
-                                ->afterStateHydrated(function (CheckboxList $component, ?TenantRole $record) use ($module) {
-                                    if (!$record) return;
-                                    
-                                    // Fetch permissions for this role that match the module
-                                    // Relation: role -> permissions (TenantRolePermission) -> permission_slug
-                                    $recordPermissions = $record->permissions()
-                                        ->whereIn('permission_slug', Permission::where('module', $module)->pluck('slug'))
-                                        ->pluck('permission_slug')
-                                        ->toArray();
-                                        
-                                    $component->state($recordPermissions);
-                                })
-                                ->dehydrated(false) // Handle saving manually in Page hooks
-                                ->columns(2);
+                \Filament\Forms\Components\CheckboxList::make('permissions')
+                    ->label('Permissions')
+                    ->options(function () {
+                        $permissions = \App\Core\Permissions\Permission::all();
+                        $options = [];
+                        foreach ($permissions as $permission) {
+                            $options[$permission->slug] = ucfirst($permission->module) . ' - ' . $permission->name;
                         }
-                        
-                        return $schema;
+                        return $options;
                     })
+                    ->columns(3)
                     ->columnSpanFull(),
             ]);
     }

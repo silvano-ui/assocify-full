@@ -44,7 +44,7 @@ class TenantRole extends Model
 
         static::addGlobalScope('tenant', function (Builder $builder) {
             if (auth()->check() && auth()->user()->tenant_id) {
-                $builder->where('tenant_id', auth()->user()->tenant_id);
+                $builder->where('tenant_roles.tenant_id', auth()->user()->tenant_id);
             }
         });
     }
