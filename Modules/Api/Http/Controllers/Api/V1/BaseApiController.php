@@ -46,15 +46,21 @@ class BaseApiController extends Controller
      *
      * @param mixed $query
      * @param int $perPage
+     * @param string|null $resource
      * @return JsonResponse
      */
-    public function paginate($query, $perPage = 15): JsonResponse
+    public function paginate($query, $perPage = 15, $resource = null): JsonResponse
     {
         $paginator = $query->paginate($perPage);
         
+        $items = $paginator->items();
+        if ($resource && class_exists($resource)) {
+            $items = $resource::collection($paginator);
+        }
+        
         return response()->json([
             'success' => true,
-            'data' => $paginator->items(),
+            'data' => $items,
             'meta' => [
                 'current_page' => $paginator->currentPage(),
                 'last_page' => $paginator->lastPage(),

@@ -2,27 +2,28 @@
 
 namespace Modules\Api\Http\Controllers\Api\V1;
 
-use Illuminate\Http\Request;
 use Modules\Payments\Entities\Transaction;
 use Modules\Payments\Entities\Invoice;
+use Modules\Api\Http\Requests\V1\StoreTransactionRequest;
+use Modules\Api\Http\Resources\V1\TransactionResource;
 
 class PaymentsController extends BaseApiController
 {
     public function index()
     {
-        return $this->paginate(Transaction::query());
+        return $this->paginate(Transaction::with('user', 'paymentMethod'), 15, TransactionResource::class);
     }
 
-    public function store(Request $request)
+    public function store(StoreTransactionRequest $request)
     {
-        $transaction = Transaction::create($request->all());
-        return $this->success($transaction, 'Payment recorded successfully', 201);
+        $transaction = Transaction::create($request->validated());
+        return $this->success(new TransactionResource($transaction), 'Payment recorded successfully', 201);
     }
 
     public function show($id)
     {
-        $transaction = Transaction::findOrFail($id);
-        return $this->success($transaction);
+        $transaction = Transaction::with(['user', 'paymentMethod', 'invoice'])->findOrFail($id);
+        return $this->success(new TransactionResource($transaction));
     }
 
     public function invoices()

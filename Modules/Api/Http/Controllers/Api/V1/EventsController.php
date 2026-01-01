@@ -5,31 +5,39 @@ namespace Modules\Api\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use Modules\Events\Entities\Event;
 use Modules\Events\Entities\EventRegistration;
+use Modules\Api\Http\Requests\V1\StoreEventRequest;
+use Modules\Api\Http\Requests\V1\UpdateEventRequest;
+use Modules\Api\Http\Resources\V1\EventResource;
 
 class EventsController extends BaseApiController
 {
     public function index()
     {
-        return $this->paginate(Event::query());
+        return $this->paginate(Event::query(), 15, EventResource::class);
     }
 
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
-        $event = Event::create($request->all());
-        return $this->success($event, 'Event created successfully', 201);
+        $data = $request->validated();
+        if (!isset($data['created_by'])) {
+            $data['created_by'] = auth()->id();
+        }
+        
+        $event = Event::create($data);
+        return $this->success(new EventResource($event), 'Event created successfully', 201);
     }
 
     public function show($id)
     {
-        $event = Event::findOrFail($id);
-        return $this->success($event);
+        $event = Event::with(['category', 'createdBy'])->findOrFail($id);
+        return $this->success(new EventResource($event));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateEventRequest $request, $id)
     {
         $event = Event::findOrFail($id);
-        $event->update($request->all());
-        return $this->success($event, 'Event updated successfully');
+        $event->update($request->validated());
+        return $this->success(new EventResource($event), 'Event updated successfully');
     }
 
     public function destroy($id)
@@ -42,6 +50,7 @@ class EventsController extends BaseApiController
     public function registrations($id)
     {
         $event = Event::findOrFail($id);
+        // Assuming we might want a resource for registrations too, but for now simple pagination
         return $this->paginate($event->registrations());
     }
 
@@ -49,6 +58,13 @@ class EventsController extends BaseApiController
     {
         $event = Event::findOrFail($id);
         
+        $request->validate([
+            'first_name' => 'required_without:user_id|string',
+            'last_name' => 'required_without:user_id|string',
+            'email' => 'required_without:user_id|email',
+            'ticket_type_id' => 'nullable|exists:event_ticket_types,id',
+        ]);
+
         $data = $request->all();
         $data['event_id'] = $event->id;
         
