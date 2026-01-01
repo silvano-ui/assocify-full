@@ -13,4 +13,12 @@ class ApiDocumentationPage extends Page
     protected static string | \UnitEnum | null $navigationGroup = 'API';
 
     protected static ?string $title = 'API Documentation';
+
+    public static function canAccess(): bool
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+        return has_feature('api.access');
+    }
 }

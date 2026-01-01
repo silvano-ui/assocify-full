@@ -25,6 +25,14 @@ class ApiConsolePage extends Page implements HasForms
 
     protected static ?string $title = 'API Console';
 
+    public static function canAccess(): bool
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+        return has_feature('api.access');
+    }
+
     public ?array $data = [];
     public ?string $response = null;
     public ?string $responseStatus = null;

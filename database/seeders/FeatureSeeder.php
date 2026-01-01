@@ -97,6 +97,16 @@ class FeatureSeeder extends Seeder
                 'is_active' => true,
                 'is_premium' => true,
             ],
+            // API
+            [
+                'slug' => 'api.access',
+                'name' => 'API Access',
+                'module' => 'api',
+                'category' => 'Integration',
+                'description' => 'Access to REST API and developer tools.',
+                'is_active' => true,
+                'is_premium' => true,
+            ],
         ];
 
         foreach ($features as $data) {

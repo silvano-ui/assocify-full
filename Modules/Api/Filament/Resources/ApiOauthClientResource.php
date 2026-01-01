@@ -30,10 +30,18 @@ class ApiOauthClientResource extends Resource
 
     protected static string | \UnitEnum | null $navigationGroup = 'API';
 
+    public static function canViewAny(): bool
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+        return has_feature('api.access');
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
+            ->components([
                 TextInput::make('name')
                     ->required()
                     ->maxLength(255),

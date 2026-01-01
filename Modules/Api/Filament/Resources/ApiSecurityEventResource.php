@@ -22,6 +22,14 @@ class ApiSecurityEventResource extends Resource
 
     protected static string | \UnitEnum | null $navigationGroup = 'API';
 
+    public static function canViewAny(): bool
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+        return has_feature('api.access');
+    }
+
     public static function canCreate(): bool
     {
         return false;
@@ -30,7 +38,7 @@ class ApiSecurityEventResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
+            ->components([
                 // Read only
             ]);
     }
