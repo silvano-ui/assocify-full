@@ -61,6 +61,9 @@ class DashboardPanelProvider extends PanelProvider
                 \Modules\Api\Filament\Resources\ApiRequestLogResource::class,
                 \Modules\Api\Filament\Resources\ApiSecurityEventResource::class,
                 \Modules\Api\Filament\Resources\ApiOauthClientResource::class,
+                \Modules\WhiteLabel\Filament\Resources\TenantBrandingResource::class,
+                \Modules\WhiteLabel\Filament\Resources\TenantDomainResource::class,
+                \Modules\WhiteLabel\Filament\Resources\DomainRegistrationResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([

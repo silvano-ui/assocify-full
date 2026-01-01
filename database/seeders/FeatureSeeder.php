@@ -107,6 +107,25 @@ class FeatureSeeder extends Seeder
                 'is_active' => true,
                 'is_premium' => true,
             ],
+            // WhiteLabel
+            [
+                'slug' => 'whitelabel.basic',
+                'name' => 'WhiteLabel Basic',
+                'module' => 'whitelabel',
+                'category' => 'Branding',
+                'description' => 'Basic white label features.',
+                'is_active' => true,
+                'is_premium' => true,
+            ],
+            [
+                'slug' => 'whitelabel.full',
+                'name' => 'WhiteLabel Full',
+                'module' => 'whitelabel',
+                'category' => 'Branding',
+                'description' => 'Full white label features.',
+                'is_active' => true,
+                'is_premium' => true,
+            ],
         ];
 
         foreach ($features as $data) {

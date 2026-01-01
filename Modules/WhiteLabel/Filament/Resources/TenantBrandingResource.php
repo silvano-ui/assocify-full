@@ -25,6 +25,18 @@ class TenantBrandingResource extends Resource
 
     protected static ?string $navigationGroup = 'White Label';
 
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        if (!$user) return false;
+        
+        // SuperAdmin sempre accesso
+        if (!$user->tenant_id) return true;
+        
+        // Tenant deve avere feature whitelabel
+        return function_exists('has_feature') && (has_feature('whitelabel.basic') || has_feature('whitelabel.full'));
+    }
+
     public static function form(Schema $schema): Schema
     {
         return $schema
