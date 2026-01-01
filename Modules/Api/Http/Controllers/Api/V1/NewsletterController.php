@@ -27,19 +27,19 @@ class NewsletterController extends BaseApiController
             'last_name' => 'nullable|string',
         ]);
 
-        $subscriber = NewsletterSubscriber::firstOrCreate(
-            ['email' => $request->email, 'tenant_id' => auth()->user()->tenant_id ?? 1],
+        $subscriber = NewsletterSubscriber::updateOrCreate(
             [
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
+                'email' => $request->email, 
+                'list_id' => $request->newsletter_list_id,
+                'tenant_id' => auth()->user()->tenant_id ?? 1
+            ],
+            [
+                'name' => trim($request->first_name . ' ' . $request->last_name),
                 'status' => 'subscribed',
+                'subscribed_at' => now(),
+                'source' => 'api',
             ]
         );
-
-        // Attach to list if not already
-        if (!$subscriber->lists()->where('newsletter_list_id', $request->newsletter_list_id)->exists()) {
-            $subscriber->lists()->attach($request->newsletter_list_id, ['status' => 'subscribed', 'created_at' => now()]);
-        }
 
         return $this->success($subscriber, 'Subscribed successfully');
     }
@@ -51,18 +51,20 @@ class NewsletterController extends BaseApiController
             'newsletter_list_id' => 'nullable|exists:newsletter_lists,id',
         ]);
 
-        $subscriber = NewsletterSubscriber::where('email', $request->email)->first();
-
-        if (!$subscriber) {
-            return $this->error('Subscriber not found', 404);
-        }
+        $query = NewsletterSubscriber::where('email', $request->email)
+            ->where('tenant_id', auth()->user()->tenant_id ?? 1);
 
         if ($request->newsletter_list_id) {
-            $subscriber->lists()->updateExistingPivot($request->newsletter_list_id, ['status' => 'unsubscribed', 'unsubscribed_at' => now()]);
-        } else {
-            // Unsubscribe from all
-            $subscriber->update(['status' => 'unsubscribed']);
-            $subscriber->lists()->update(['status' => 'unsubscribed', 'unsubscribed_at' => now()]); // Logic depends on pivot or direct update
+            $query->where('list_id', $request->newsletter_list_id);
+        }
+
+        $updatedCount = $query->update([
+            'status' => 'unsubscribed', 
+            'unsubscribed_at' => now()
+        ]);
+
+        if ($updatedCount === 0) {
+            return $this->error('Subscriber not found or already unsubscribed', 404);
         }
 
         return $this->success([], 'Unsubscribed successfully');

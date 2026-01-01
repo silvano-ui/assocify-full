@@ -16,27 +16,6 @@ components:
       type: http
       scheme: bearer
   schemas:
-    Member:
-      type: object
-      properties:
-        id:
-          type: integer
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-    Event:
-      type: object
-      properties:
-        id:
-          type: integer
-        title:
-          type: string
-        starts_at:
-          type: string
-          format: date-time
     Document:
       type: object
       properties:
@@ -46,6 +25,24 @@ components:
           type: string
         file_name:
           type: string
+        file_path:
+          type: string
+        file_size:
+          type: integer
+        file_type:
+          type: string
+        document_category_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+    DocumentCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
     Album:
       type: object
       properties:
@@ -53,15 +50,377 @@ components:
           type: integer
         name:
           type: string
+        description:
+          type: string
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+    Media:
+      type: object
+      properties:
+        id:
+          type: integer
+        album_id:
+          type: integer
+        file_path:
+          type: string
+        file_type:
+          type: string
+    Conversation:
+      type: object
+      properties:
+        id:
+          type: integer
+        subject:
+          type: string
+        type:
+          type: string
+          enum: [private, group]
+        last_message:
+          $ref: '#/components/schemas/Message'
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+        conversation_id:
+          type: integer
+        user_id:
+          type: integer
+        body:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    NewsletterList:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        subscribers_count:
+          type: integer
+    Subscriber:
+      type: object
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        name:
+          type: string
+        status:
+          type: string
+          enum: [subscribed, unsubscribed, bounced]
 security:
   - ApiKeyAuth: []
   - BearerAuth: []
 paths:
-  /auth/login:
+  /documents:
+    get:
+      tags: [Documents]
+      summary: List documents
+      responses:
+        '200':
+          description: List of documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
     post:
-      summary: Login
+      tags: [Documents]
+      summary: Upload document
       requestBody:
-        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                file:
+                  type: string
+                  format: binary
+                document_category_id:
+                  type: integer
+      responses:
+        '201':
+          description: Document uploaded
+  /documents/{id}:
+    get:
+      tags: [Documents]
+      summary: Get document details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Document details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+    delete:
+      tags: [Documents]
+      summary: Delete document
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Document deleted
+  /documents/{id}/download:
+    get:
+      tags: [Documents]
+      summary: Download document file
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: File download
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+  /documents/categories:
+    get:
+      tags: [Documents]
+      summary: List document categories
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentCategory'
+  /albums:
+    get:
+      tags: [Gallery]
+      summary: List albums
+      responses:
+        '200':
+          description: List of albums
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Album'
+  /albums/{id}:
+    get:
+      tags: [Gallery]
+      summary: Get album details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Album details with media
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Album'
+  /media:
+    get:
+      tags: [Gallery]
+      summary: List media
+      responses:
+        '200':
+          description: List of media
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Media'
+    post:
+      tags: [Gallery]
+      summary: Upload media
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                album_id:
+                  type: integer
+      responses:
+        '201':
+          description: Media uploaded
+  /media/{id}:
+    get:
+      tags: [Gallery]
+      summary: Get media details
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Media details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+    delete:
+      tags: [Gallery]
+      summary: Delete media
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Media deleted
+  /conversations:
+    get:
+      tags: [Chat]
+      summary: List conversations
+      responses:
+        '200':
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Conversation'
+    post:
+      tags: [Chat]
+      summary: Create conversation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                participant_ids:
+                  type: array
+                  items:
+                    type: integer
+                subject:
+                  type: string
+      responses:
+        '201':
+          description: Conversation created
+  /conversations/{id}/messages:
+    get:
+      tags: [Chat]
+      summary: List messages in conversation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+    post:
+      tags: [Chat]
+      summary: Send message
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                body:
+                  type: string
+      responses:
+        '201':
+          description: Message sent
+  /newsletter/lists:
+    get:
+      tags: [Newsletter]
+      summary: List newsletter lists
+      responses:
+        '200':
+          description: List of newsletter lists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NewsletterList'
+  /newsletter/subscribers:
+    get:
+      tags: [Newsletter]
+      summary: List subscribers
+      responses:
+        '200':
+          description: List of subscribers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Subscriber'
+  /newsletter/subscribe:
+    post:
+      tags: [Newsletter]
+      summary: Subscribe to newsletter
+      requestBody:
         content:
           application/json:
             schema:
@@ -69,43 +428,29 @@ paths:
               properties:
                 email:
                   type: string
-                password:
+                newsletter_list_id:
+                  type: integer
+                first_name:
+                  type: string
+                last_name:
                   type: string
       responses:
         '200':
-          description: Successful login
-  /members:
-    get:
-      summary: List members
-      responses:
-        '200':
-          description: List of members
+          description: Subscribed successfully
+  /newsletter/unsubscribe:
     post:
-      summary: Create member
-      responses:
-        '201':
-          description: Member created
-  /events:
-    get:
-      summary: List events
-      responses:
-        '200':
-          description: List of events
-  /documents:
-    get:
-      summary: List documents
-      responses:
-        '200':
-          description: List of documents
-  /albums:
-    get:
-      summary: List albums
+      tags: [Newsletter]
+      summary: Unsubscribe from newsletter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                newsletter_list_id:
+                  type: integer
       responses:
         '200':
-          description: List of albums
-  /conversations:
-    get:
-      summary: List conversations
-      responses:
-        '200':
-          description: List of conversations
+          description: Unsubscribed successfully
