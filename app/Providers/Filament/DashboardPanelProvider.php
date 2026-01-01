@@ -31,6 +31,7 @@ class DashboardPanelProvider extends PanelProvider
                 'primary' => Color::Blue,
             ])
             ->discoverResources(in: app_path('Filament/Dashboard/Resources'), for: 'App\Filament\Dashboard\Resources')
+            ->discoverResources(in: base_path('Modules/Members/Filament/Resources'), for: 'Modules\\Members\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([
                 Dashboard::class,
