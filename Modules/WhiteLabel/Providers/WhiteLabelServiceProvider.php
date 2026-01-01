@@ -14,6 +14,7 @@ use Modules\WhiteLabel\Services\MenuService;
 class WhiteLabelServiceProvider extends ServiceProvider
 {
     protected string $moduleName = 'WhiteLabel';
+    protected string $name = 'WhiteLabel';
     protected string $moduleNameLower = 'whitelabel';
 
     /**
