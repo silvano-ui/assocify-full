@@ -43,12 +43,12 @@ class UserTenantRole extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\Core\Users\User::class);
     }
 
     public function tenant(): BelongsTo
     {
-        return $this->belongsTo(Tenant::class);
+        return $this->belongsTo(\App\Core\Tenant\Tenant::class);
     }
 
     public function role(): BelongsTo
@@ -58,6 +58,6 @@ class UserTenantRole extends Model
 
     public function assignedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assigned_by');
+        return $this->belongsTo(\App\Core\Users\User::class, 'assigned_by');
     }
 }

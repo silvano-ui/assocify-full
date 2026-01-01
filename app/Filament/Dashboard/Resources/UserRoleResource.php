@@ -6,7 +6,6 @@ use App\Core\Users\User;
 use App\Core\Permissions\TenantRole;
 use App\Filament\Dashboard\Resources\UserRoleResource\Pages;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,9 +18,9 @@ class UserRoleResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
 
     protected static ?string $label = 'User Role';
     protected static ?string $pluralLabel = 'User Roles';
@@ -34,10 +33,10 @@ class UserRoleResource extends Resource
             ->where('tenant_id', auth()->user()->tenant_id);
     }
 
-    public static function form(Form $form): Form
+    public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('name')
                     ->disabled(),
                 TextInput::make('email')

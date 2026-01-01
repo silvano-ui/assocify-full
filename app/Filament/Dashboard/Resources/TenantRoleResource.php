@@ -8,7 +8,6 @@ use App\Core\Permissions\RoleTemplate;
 use App\Core\Permissions\TenantRolePermission;
 use App\Filament\Dashboard\Resources\TenantRoleResource\Pages;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -28,17 +27,17 @@ class TenantRoleResource extends Resource
 {
     protected static ?string $model = TenantRole::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-shield-check';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-shield-check';
 
-    protected static ?string $navigationGroup = 'Settings';
+    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
 
     protected static ?string $label = 'Role';
     protected static ?string $pluralLabel = 'Roles';
 
-    public static function form(Form $form): Form
+    public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 TextInput::make('name')
                     ->required()
                     ->live(onBlur: true)

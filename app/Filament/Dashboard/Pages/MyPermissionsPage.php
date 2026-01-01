@@ -9,11 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class MyPermissionsPage extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-finger-print';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-finger-print';
 
-    protected static string $view = 'filament.dashboard.pages.my-permissions-page';
+    protected string $view = 'filament.dashboard.pages.my-permissions-page';
 
-    protected static ?string $navigationGroup = 'Account';
+    protected static string | \UnitEnum | null $navigationGroup = 'Account';
     
     protected static ?string $title = 'My Permissions';
 

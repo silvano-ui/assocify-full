@@ -3,5 +3,6 @@
     "Events": true,
     "Payments": true,
     "Chat": true,
-    "Gallery": true
+    "Gallery": true,
+    "Documents": true
 }
