@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class TenantRole extends Model
 {
@@ -37,14 +38,14 @@ class TenantRole extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
-            if (!$model->tenant_id && auth()->check() && auth()->user()->tenant_id) {
-                $model->tenant_id = auth()->user()->tenant_id;
+            if (!$model->tenant_id && Auth::check() && Auth::user()->tenant_id) {
+                $model->tenant_id = Auth::user()->tenant_id;
             }
         });
 
         static::addGlobalScope('tenant', function (Builder $builder) {
-            if (auth()->check() && auth()->user()->tenant_id) {
-                $builder->where('tenant_roles.tenant_id', auth()->user()->tenant_id);
+            if (Auth::check() && Auth::user()->tenant_id) {
+                $builder->where('tenant_roles.tenant_id', Auth::user()->tenant_id);
             }
         });
     }

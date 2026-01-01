@@ -10,6 +10,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Modules\Api\Entities\ApiSecurityEvent;
 use Modules\Api\Filament\Resources\ApiSecurityEventResource\Pages;
 
@@ -23,7 +24,7 @@ class ApiSecurityEventResource extends Resource
 
     public static function canViewAny(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
         if (!$user) return false;
         
         // SuperAdmin (no tenant_id) always has access
