@@ -4,5 +4,6 @@
     "Payments": true,
     "Chat": true,
     "Gallery": true,
-    "Documents": true
+    "Documents": true,
+    "Newsletter": true
 }
