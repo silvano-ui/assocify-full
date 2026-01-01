@@ -36,6 +36,10 @@ class DashboardPanelProvider extends PanelProvider
                 \Modules\Members\Filament\Resources\MemberCategoryResource::class,
                 \Modules\Events\Filament\Resources\EventCategoryResource::class,
                 \Modules\Events\Filament\Resources\EventResource::class,
+                \Modules\Payments\Filament\Resources\InvoiceResource::class,
+                \Modules\Payments\Filament\Resources\TransactionResource::class,
+                \Modules\Payments\Filament\Resources\PaymentMethodResource::class,
+                \Modules\Payments\Filament\Resources\SubscriptionRenewalResource::class,
             ])
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
             ->pages([

@@ -95,5 +95,12 @@ class DatabaseSeeder extends Seeder
             'enabled' => true,
             'enabled_at' => now(),
         ]);
+
+        \App\Core\Tenant\TenantModule::create([
+            'tenant_id' => $tenant->id,
+            'module_slug' => 'payments',
+            'enabled' => true,
+            'enabled_at' => now(),
+        ]);
     }
 }

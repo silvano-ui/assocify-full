@@ -1,4 +1,5 @@
 {
     "Members": true,
-    "Events": true
+    "Events": true,
+    "Payments": true
 }
