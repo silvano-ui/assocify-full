@@ -13,9 +13,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Modules\Api\Entities\ApiOauthClient;
@@ -58,19 +55,18 @@ class ApiOauthClientResource extends Resource
                     ->default(fn () => Str::random(40))
                     ->visible(fn ($livewire) => $livewire instanceof Pages\CreateApiOauthClient)
                     ->helperText('Copy this secret now. You won\'t be able to see it again.'),
-                TagsInput::make('redirect_uris')
-                    ->label('Redirect URIs')
-                    ->required()
-                    ->placeholder('https://example.com/callback'),
-                Select::make('grant_types')
-                    ->multiple()
+                \Filament\Forms\Components\Textarea::make('redirect_uris')
+                    ->label('Redirect URIs (one per line)')
+                    ->rows(3)
+                    ->helperText('Enter one URI per line'),
+                \Filament\Forms\Components\CheckboxList::make('grant_types')
                     ->options([
                         'authorization_code' => 'Authorization Code',
                         'client_credentials' => 'Client Credentials',
                         'refresh_token' => 'Refresh Token',
                         'password' => 'Password',
-                        'personal_access' => 'Personal Access',
                     ])
+                    ->columns(2)
                     ->required(),
                 Toggle::make('is_confidential')
                     ->label('Confidential Client')
@@ -108,9 +104,9 @@ class ApiOauthClientResource extends Resource
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                Action::make('regenerate_secret')
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\DeleteAction::make(),
+                \Filament\Actions\Action::make('regenerate_secret')
                     ->label('Regenerate Secret')
                     ->icon('heroicon-o-arrow-path')
                     ->color('danger')
@@ -128,8 +124,8 @@ class ApiOauthClientResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

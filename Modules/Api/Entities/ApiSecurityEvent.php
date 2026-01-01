@@ -33,8 +33,11 @@ class ApiSecurityEvent extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
-            if (auth()->check() && auth()->user()->tenant_id && !$model->tenant_id) {
-                $model->tenant_id = auth()->user()->tenant_id;
+            if (auth()->check()) {
+                // Set tenant_id - use user's tenant or default to 1 for SuperAdmin
+                if (!$model->tenant_id) {
+                    $model->tenant_id = auth()->user()->tenant_id ?? 1;
+                }
             }
         });
 
@@ -42,6 +45,7 @@ class ApiSecurityEvent extends Model
             if (auth()->check() && auth()->user()->tenant_id) {
                 $query->where('tenant_id', auth()->user()->tenant_id);
             }
+            // SuperAdmin (no tenant_id) sees all records - no filter applied
         });
     }
 

@@ -12,9 +12,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Modules\Api\Entities\ApiWebhook;
@@ -96,7 +93,7 @@ class ApiWebhookResource extends Resource
                     ->limit(30)
                     ->searchable(),
                 TextColumn::make('events')
-                    ->formatStateUsing(fn ($state) => count($state ?? []) . ' events')
+                    ->formatStateUsing(fn ($state) => is_array($state) ? count($state) : 0)
                     ->badge(),
                 TextColumn::make('last_status')
                     ->badge()
@@ -108,7 +105,7 @@ class ApiWebhookResource extends Resource
                 TextColumn::make('failure_count')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('is_active')
+                \Filament\Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -119,9 +116,9 @@ class ApiWebhookResource extends Resource
                 //
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
-                Action::make('test')
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\DeleteAction::make(),
+                \Filament\Actions\Action::make('test')
                     ->label('Test Webhook')
                     ->icon('heroicon-o-paper-airplane')
                     ->requiresConfirmation()
@@ -156,8 +153,8 @@ class ApiWebhookResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

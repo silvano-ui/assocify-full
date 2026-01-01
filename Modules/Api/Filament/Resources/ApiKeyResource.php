@@ -17,9 +17,6 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Support\Str;
 
 class ApiKeyResource extends Resource
@@ -111,15 +108,15 @@ class ApiKeyResource extends Resource
                     ]),
             ])
             ->actions([
-                EditAction::make(),
-                Action::make('view_key')
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\Action::make('view_key')
                     ->label('View Key')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('API Key Details')
                     ->modalContent(fn (ApiKey $record) => view('api::filament.resources.api-key-modal', ['record' => $record]))
                     ->modalSubmitAction(false)
                     ->modalCancelActionLabel('Close'),
-                Action::make('regenerate_secret')
+                \Filament\Actions\Action::make('regenerate_secret')
                     ->label('Regenerate Secret')
                     ->icon('heroicon-o-arrow-path')
                     ->color('danger')
@@ -137,7 +134,7 @@ class ApiKeyResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\DeleteBulkAction::make(),
             ]);
     }
 

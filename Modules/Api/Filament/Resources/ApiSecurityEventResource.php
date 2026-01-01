@@ -9,7 +9,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
 use Modules\Api\Entities\ApiSecurityEvent;
 use Modules\Api\Filament\Resources\ApiSecurityEventResource\Pages;
@@ -93,7 +92,7 @@ class ApiSecurityEventResource extends Resource
                     ]),
             ])
             ->actions([
-                Action::make('block_ip')
+                \Filament\Actions\Action::make('block_ip')
                     ->label('Block IP')
                     ->icon('heroicon-o-no-symbol')
                     ->color('danger')
@@ -114,8 +113,8 @@ class ApiSecurityEventResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

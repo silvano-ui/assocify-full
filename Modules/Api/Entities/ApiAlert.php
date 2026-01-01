@@ -35,9 +35,11 @@ class ApiAlert extends Model
     {
         static::creating(function ($model) {
             if (auth()->check()) {
-                if (auth()->user()->tenant_id) {
-                    $model->tenant_id = auth()->user()->tenant_id;
+                // Set tenant_id - use user's tenant or default to 1 for SuperAdmin
+                if (!$model->tenant_id) {
+                    $model->tenant_id = auth()->user()->tenant_id ?? 1;
                 }
+                
                 if (!$model->created_by) {
                     $model->created_by = auth()->id();
                 }
@@ -48,6 +50,7 @@ class ApiAlert extends Model
             if (auth()->check() && auth()->user()->tenant_id) {
                 $query->where('tenant_id', auth()->user()->tenant_id);
             }
+            // SuperAdmin (no tenant_id) sees all records - no filter applied
         });
     }
 
