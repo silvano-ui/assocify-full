@@ -20,7 +20,6 @@ use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Tables\Actions\Action;
 
 class TenantFeatureResource extends Resource
 {
@@ -65,7 +64,7 @@ class TenantFeatureResource extends Resource
                 
                 TextInput::make('used_value')
                     ->numeric()
-                    ->disabled(), // Usage should not be manually edited usually, or maybe yes for correction?
+                    ->disabled(),
 
                 DatePicker::make('expires_at'),
                 
@@ -104,9 +103,9 @@ class TenantFeatureResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Actions\EditAction::make(),
                 
-                Action::make('activate_trial')
+                \Filament\Actions\Action::make('activate_trial')
                     ->label('Activate Trial')
                     ->icon('heroicon-o-clock')
                     ->requiresConfirmation()
@@ -124,7 +123,7 @@ class TenantFeatureResource extends Resource
                     })
                     ->visible(fn (TenantFeature $record) => !$record->is_trial),
 
-                Action::make('gift_feature')
+                \Filament\Actions\Action::make('gift_feature')
                     ->label('Gift Feature')
                     ->icon('heroicon-o-gift')
                     ->requiresConfirmation()
@@ -142,15 +141,15 @@ class TenantFeatureResource extends Resource
                     })
                     ->visible(fn (TenantFeature $record) => $record->source !== 'gift'),
 
-                Action::make('revoke')
+                \Filament\Actions\Action::make('revoke')
                     ->label('Revoke')
                     ->color('danger')
                     ->requiresConfirmation()
                     ->action(fn (TenantFeature $record) => $record->update(['enabled' => false])),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

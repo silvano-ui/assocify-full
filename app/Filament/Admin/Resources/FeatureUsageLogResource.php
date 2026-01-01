@@ -82,7 +82,7 @@ class FeatureUsageLogResource extends Resource
                     }),
             ])
             ->headerActions([
-                Tables\Actions\ExportAction::make()
+                \Filament\Actions\ExportAction::make()
                     ->exporter(\App\Filament\Exports\FeatureUsageLogExporter::class),
             ])
             ->actions([

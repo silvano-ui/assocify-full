@@ -31,62 +31,53 @@ class FeatureResource extends Resource
     {
         return $schema
             ->components([
-                Section::make('General')
+                TextInput::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                TextInput::make('name')
+                    ->required(),
+                TextInput::make('module')
+                    ->required(),
+                TextInput::make('category'),
+                TextInput::make('description')
+                    ->columnSpanFull(),
+                TextInput::make('icon'),
+                TextInput::make('unit_name')
+                    ->label('Unit Name (e.g., "users", "GB")'),
+                TextInput::make('sort_order')
+                    ->numeric()
+                    ->default(0),
+
+                Toggle::make('is_active')
+                    ->default(true),
+                Toggle::make('is_premium')
+                    ->default(false),
+                Toggle::make('is_beta')
+                    ->default(false),
+                
+                TextInput::make('price_monthly')
+                    ->numeric()
+                    ->prefix('€'),
+                TextInput::make('price_yearly')
+                    ->numeric()
+                    ->prefix('€'),
+                TextInput::make('price_per_unit')
+                    ->numeric()
+                    ->prefix('€'),
+
+                KeyValue::make('settings')
+                    ->label('Settings JSON'),
+                
+                Repeater::make('dependencies')
+                    ->relationship('dependencies')
                     ->schema([
-                        TextInput::make('slug')
+                        Select::make('requires_feature_slug')
+                            ->label('Requires Feature')
+                            ->options(Feature::pluck('name', 'slug'))
                             ->required()
-                            ->unique(ignoreRecord: true),
-                        TextInput::make('name')
-                            ->required(),
-                        TextInput::make('module')
-                            ->required(),
-                        TextInput::make('category'),
-                        TextInput::make('description')
-                            ->columnSpanFull(),
-                        TextInput::make('icon'),
-                        TextInput::make('unit_name')
-                            ->label('Unit Name (e.g., "users", "GB")'),
-                        TextInput::make('sort_order')
-                            ->numeric()
-                            ->default(0),
-                    ])->columns(2),
-
-                Section::make('Pricing & Flags')
-                    ->schema([
-                        Toggle::make('is_active')
-                            ->default(true),
-                        Toggle::make('is_premium')
-                            ->default(false),
-                        Toggle::make('is_beta')
-                            ->default(false),
-                        
-                        TextInput::make('price_monthly')
-                            ->numeric()
-                            ->prefix('€'),
-                        TextInput::make('price_yearly')
-                            ->numeric()
-                            ->prefix('€'),
-                        TextInput::make('price_per_unit')
-                            ->numeric()
-                            ->prefix('€'),
-                    ])->columns(3),
-
-                Section::make('Configuration')
-                    ->schema([
-                        KeyValue::make('settings')
-                            ->label('Settings JSON'),
-                        
-                        Repeater::make('dependencies')
-                            ->relationship('dependencies')
-                            ->schema([
-                                Select::make('requires_feature_slug')
-                                    ->label('Requires Feature')
-                                    ->options(Feature::pluck('name', 'slug'))
-                                    ->required()
-                                    ->searchable(),
-                            ])
-                            ->columnSpanFull(),
-                    ]),
+                            ->searchable(),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -112,11 +103,11 @@ class FeatureResource extends Resource
                 TernaryFilter::make('is_beta'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

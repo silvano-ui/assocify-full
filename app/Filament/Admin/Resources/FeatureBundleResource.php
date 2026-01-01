@@ -29,47 +29,38 @@ class FeatureBundleResource extends Resource
     {
         return $schema
             ->components([
-                Section::make('Bundle Details')
-                    ->schema([
-                        TextInput::make('slug')
-                            ->required()
-                            ->unique(ignoreRecord: true),
-                        TextInput::make('name')
-                            ->required(),
-                        TextInput::make('description')
-                            ->columnSpanFull(),
-                    ])->columns(2),
+                TextInput::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true),
+                TextInput::make('name')
+                    ->required(),
+                TextInput::make('description')
+                    ->columnSpanFull(),
 
-                Section::make('Pricing')
-                    ->schema([
-                        TextInput::make('price_monthly')
-                            ->required()
-                            ->numeric()
-                            ->prefix('€'),
-                        TextInput::make('price_yearly')
-                            ->required()
-                            ->numeric()
-                            ->prefix('€'),
-                        TextInput::make('discount_percent')
-                            ->numeric()
-                            ->suffix('%')
-                            ->default(0),
-                        Toggle::make('is_active')
-                            ->default(true),
-                        TextInput::make('sort_order')
-                            ->numeric()
-                            ->default(0),
-                    ])->columns(3),
+                TextInput::make('price_monthly')
+                    ->required()
+                    ->numeric()
+                    ->prefix('€'),
+                TextInput::make('price_yearly')
+                    ->required()
+                    ->numeric()
+                    ->prefix('€'),
+                TextInput::make('discount_percent')
+                    ->numeric()
+                    ->suffix('%')
+                    ->default(0),
+                Toggle::make('is_active')
+                    ->default(true),
+                TextInput::make('sort_order')
+                    ->numeric()
+                    ->default(0),
 
-                Section::make('Included Features')
-                    ->schema([
-                        Select::make('features')
-                            ->relationship('features', 'name')
-                            ->multiple()
-                            ->preload()
-                            ->searchable()
-                            ->columnSpanFull(),
-                    ]),
+                Select::make('features')
+                    ->relationship('features', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -88,11 +79,11 @@ class FeatureBundleResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

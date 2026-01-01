@@ -27,4 +27,9 @@ class PlanFeature extends Model
     {
         return $this->belongsTo(Feature::class, 'feature_slug', 'slug');
     }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(\App\Core\Plans\Plan::class);
+    }
 }
