@@ -77,8 +77,8 @@ class NewsletterListResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Action::make('import_csv')
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\Action::make('import_csv')
                     ->label('Import CSV')
                     ->icon('heroicon-o-arrow-up-tray')
                     ->form([
@@ -98,7 +98,7 @@ class NewsletterListResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\DeleteBulkAction::make(),
             ]);
     }
 

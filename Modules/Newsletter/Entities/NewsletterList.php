@@ -34,11 +34,32 @@ class NewsletterList extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
-            if (!$model->tenant_id && Filament::getTenant()) {
-                $model->tenant_id = Filament::getTenant()->id;
+            if (auth()->check()) {
+                if (auth()->user()->tenant_id) {
+                    $model->tenant_id = auth()->user()->tenant_id;
+                }
+                if (!$model->created_by) {
+                    $model->created_by = auth()->id();
+                }
             }
-            if (!$model->created_by && auth()->check()) {
-                $model->created_by = auth()->id();
+
+            // Auto-generate unique slug from name
+            if (!$model->slug && $model->name) {
+                $baseSlug = \Illuminate\Support\Str::slug($model->name);
+                $slug = $baseSlug . '-' . strtolower(\Illuminate\Support\Str::random(8));
+
+                // Ensure uniqueness within tenant
+                while (static::withoutGlobalScopes()->where('tenant_id', $model->tenant_id)->where('slug', $slug)->exists()) {
+                    $slug = $baseSlug . '-' . strtolower(\Illuminate\Support\Str::random(8));
+                }
+
+                $model->slug = $slug;
+            }
+        });
+
+        static::addGlobalScope('tenant', function ($query) {
+            if (auth()->check() && auth()->user()->tenant_id) {
+                $query->where('tenant_id', auth()->user()->tenant_id);
             }
         });
     }

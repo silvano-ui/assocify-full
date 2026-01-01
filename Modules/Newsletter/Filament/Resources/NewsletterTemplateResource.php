@@ -66,15 +66,17 @@ class NewsletterTemplateResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Action::make('preview')
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\Action::make('preview')
                     ->label('Preview')
                     ->icon('heroicon-o-eye')
-                    ->url(fn (NewsletterTemplate $record) => '#') // Placeholder for preview URL
-                    ->openUrlInNewTab(),
+                    ->modalHeading('Preview Template')
+                    ->modalContent(fn ($record) => view('newsletter::preview-template', ['template' => $record]))
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close'),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\DeleteBulkAction::make(),
             ]);
     }
 

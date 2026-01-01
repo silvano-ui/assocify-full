@@ -84,15 +84,15 @@ class NewsletterSubscriberResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                \Filament\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-                BulkAction::make('subscribe')
+                \Filament\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkAction::make('subscribe')
                     ->label('Subscribe')
                     ->icon('heroicon-o-check')
                     ->action(fn (Collection $records) => $records->each->update(['status' => 'subscribed'])),
-                BulkAction::make('unsubscribe')
+                \Filament\Actions\BulkAction::make('unsubscribe')
                     ->label('Unsubscribe')
                     ->icon('heroicon-o-x-mark')
                     ->action(fn (Collection $records) => $records->each->update(['status' => 'unsubscribed'])),

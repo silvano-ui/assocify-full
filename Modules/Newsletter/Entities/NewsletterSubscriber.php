@@ -38,8 +38,16 @@ class NewsletterSubscriber extends Model
     protected static function booted(): void
     {
         static::creating(function ($model) {
-            if (!$model->tenant_id && Filament::getTenant()) {
-                $model->tenant_id = Filament::getTenant()->id;
+            if (auth()->check()) {
+                if (auth()->user()->tenant_id) {
+                    $model->tenant_id = auth()->user()->tenant_id;
+                }
+            }
+        });
+
+        static::addGlobalScope('tenant', function ($query) {
+            if (auth()->check() && auth()->user()->tenant_id) {
+                $query->where('tenant_id', auth()->user()->tenant_id);
             }
         });
     }

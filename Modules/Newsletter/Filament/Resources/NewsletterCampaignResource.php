@@ -9,15 +9,9 @@ use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Tabs;
-use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Actions\Action;
-use Modules\Newsletter\Entities\NewsletterList;
-use Modules\Newsletter\Entities\NewsletterTemplate;
 
 class NewsletterCampaignResource extends Resource
 {
@@ -27,68 +21,44 @@ class NewsletterCampaignResource extends Resource
 
     protected static string | \UnitEnum | null $navigationGroup = 'Newsletter';
 
-    public static function form(Schema $schema): Schema
+    public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
         return $schema
             ->components([
-                Tabs::make('Campaign Details')
-                    ->tabs([
-                        Tabs\Tab::make('General')
-                            ->schema([
-                                TextInput::make('name')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('subject')
-                                    ->required()
-                                    ->maxLength(255),
-                                TextInput::make('preview_text')
-                                    ->maxLength(255),
-                                TextInput::make('from_name')
-                                    ->required()
-                                    ->default(fn () => auth()->user()->name ?? config('mail.from.name')),
-                                TextInput::make('from_email')
-                                    ->email()
-                                    ->required()
-                                    ->default(fn () => auth()->user()->email ?? config('mail.from.address')),
-                            ]),
-                        Tabs\Tab::make('Content')
-                            ->schema([
-                                Select::make('template_id')
-                                    ->label('Template')
-                                    ->options(NewsletterTemplate::pluck('name', 'id'))
-                                    ->searchable(),
-                                Select::make('list_ids')
-                                    ->label('Recipients Lists')
-                                    ->multiple()
-                                    ->options(NewsletterList::pluck('name', 'id'))
-                                    ->searchable(),
-                                Textarea::make('segment_filters')
-                                    ->rows(3),
-                            ]),
-                        Tabs\Tab::make('Schedule')
-                            ->schema([
-                                Select::make('status')
-                                    ->options([
-                                        'draft' => 'Draft',
-                                        'scheduled' => 'Scheduled',
-                                        'sending' => 'Sending',
-                                        'sent' => 'Sent',
-                                        'paused' => 'Paused',
-                                        'cancelled' => 'Cancelled',
-                                    ])
-                                    ->default('draft')
-                                    ->required(),
-                                DateTimePicker::make('send_at')
-                                    ->label('Scheduled For'),
-                            ]),
-                        Tabs\Tab::make('Statistics')
-                            ->schema([
-                                TextInput::make('sent_count')
-                                    ->label('Sent')
-                                    ->disabled(),
-                                // Add more stats fields or widgets here
-                            ]),
-                    ])->columnSpanFull(),
+                \Filament\Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+                \Filament\Forms\Components\TextInput::make('subject')
+                    ->required()
+                    ->maxLength(255),
+                \Filament\Forms\Components\TextInput::make('preview_text')
+                    ->maxLength(255),
+                \Filament\Forms\Components\TextInput::make('from_name')
+                    ->required()
+                    ->maxLength(255),
+                \Filament\Forms\Components\TextInput::make('from_email')
+                    ->email()
+                    ->required(),
+                \Filament\Forms\Components\TextInput::make('reply_to')
+                    ->email(),
+                \Filament\Forms\Components\Select::make('template_id')
+                    ->relationship('template', 'name'),
+                \Filament\Forms\Components\Select::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'scheduled' => 'Scheduled',
+                        'sending' => 'Sending',
+                        'sent' => 'Sent',
+                        'paused' => 'Paused',
+                        'cancelled' => 'Cancelled',
+                    ])
+                    ->default('draft'),
+                \Filament\Forms\Components\DateTimePicker::make('send_at')
+                    ->label('Schedule Send'),
+                \Filament\Forms\Components\Textarea::make('html_content')
+                    ->label('Email Content')
+                    ->rows(10)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -119,8 +89,8 @@ class NewsletterCampaignResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Action::make('send_now')
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\Action::make('send_now')
                     ->label('Send Now')
                     ->icon('heroicon-o-paper-airplane')
                     ->requiresConfirmation()
@@ -131,7 +101,7 @@ class NewsletterCampaignResource extends Resource
                             ->success()
                             ->send();
                     }),
-                Action::make('schedule')
+                \Filament\Actions\Action::make('schedule')
                     ->label('Schedule')
                     ->icon('heroicon-o-clock')
                     ->form([
@@ -145,14 +115,14 @@ class NewsletterCampaignResource extends Resource
                             ->success()
                             ->send();
                     }),
-                Action::make('pause')
+                \Filament\Actions\Action::make('pause')
                     ->label('Pause')
                     ->icon('heroicon-o-pause')
                     ->visible(fn (NewsletterCampaign $record) => $record->status === 'sending')
                     ->action(function (NewsletterCampaign $record) {
                         $record->update(['status' => 'paused']);
                     }),
-                Action::make('duplicate')
+                \Filament\Actions\Action::make('duplicate')
                     ->label('Duplicate')
                     ->icon('heroicon-o-document-duplicate')
                     ->action(function (NewsletterCampaign $record) {
@@ -167,7 +137,7 @@ class NewsletterCampaignResource extends Resource
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\DeleteBulkAction::make(),
             ]);
     }
 
