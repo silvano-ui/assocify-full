@@ -6,6 +6,8 @@ use Filament\Widgets\ChartWidget;
 
 class TenantsComparisonWidget extends ChartWidget
 {
+    protected static ?int $sort = 11;
+
     protected function getData(): array
     {
         return [

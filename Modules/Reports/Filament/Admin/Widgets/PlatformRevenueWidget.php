@@ -6,6 +6,8 @@ use Filament\Widgets\ChartWidget;
 
 class PlatformRevenueWidget extends ChartWidget
 {
+    protected static ?int $sort = 12;
+
     protected function getData(): array
     {
         return [

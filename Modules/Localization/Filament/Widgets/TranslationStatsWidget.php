@@ -9,6 +9,8 @@ use Modules\Localization\Entities\Translation;
 
 class TranslationStatsWidget extends BaseWidget
 {
+    protected static ?int $sort = 13;
+
     protected function getStats(): array
     {
         return [

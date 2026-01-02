@@ -10,6 +10,8 @@ use Modules\Localization\Entities\Translation;
 
 class TranslationCoverageWidget extends BaseWidget
 {
+    protected static ?int $sort = 14;
+
     public function table(Table $table): Table
     {
         return $table

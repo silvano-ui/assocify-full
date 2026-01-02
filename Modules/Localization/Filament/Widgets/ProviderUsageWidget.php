@@ -8,6 +8,10 @@ use Modules\Localization\Entities\TranslationSetting;
 
 class ProviderUsageWidget extends BaseWidget
 {
+    protected static ?int $sort = 2;
+
+    protected int | string | array $columnSpan = 1;
+
     protected function getStats(): array
     {
         $settings = TranslationSetting::where('is_active', true)->get();

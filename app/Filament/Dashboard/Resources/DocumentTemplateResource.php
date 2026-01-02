@@ -5,6 +5,7 @@ namespace App\Filament\Dashboard\Resources;
 use App\Filament\Dashboard\Resources\DocumentTemplateResource\Pages;
 use Modules\Documents\Entities\DocumentTemplate;
 use Filament\Forms;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -52,16 +53,16 @@ class DocumentTemplateResource extends Resource
                     
                 Forms\Components\FileUpload::make('base_file_path')
                     ->label('Base Template File')
-                    ->visible(fn (Forms\Get $get) => in_array($get('type'), ['pdf_fillable', 'docx_merge']))
+                    ->visible(fn (Get $get) => in_array($get('type'), ['pdf_fillable', 'docx_merge']))
                     ->directory('templates'),
                     
                 Forms\Components\RichEditor::make('html_content')
                     ->label('HTML Content')
-                    ->visible(fn (Forms\Get $get) => in_array($get('type'), ['html_to_pdf', 'certificate', 'receipt', 'membership_card'])),
+                    ->visible(fn (Get $get) => in_array($get('type'), ['html_to_pdf', 'certificate', 'receipt', 'membership_card'])),
                 
                 Forms\Components\Textarea::make('css_styles')
                     ->label('CSS Styles')
-                    ->visible(fn (Forms\Get $get) => in_array($get('type'), ['html_to_pdf', 'certificate', 'receipt', 'membership_card'])),
+                    ->visible(fn (Get $get) => in_array($get('type'), ['html_to_pdf', 'certificate', 'receipt', 'membership_card'])),
                     
                 Forms\Components\Select::make('output_format')
                     ->options(['pdf' => 'PDF', 'docx' => 'DOCX', 'png' => 'PNG'])
