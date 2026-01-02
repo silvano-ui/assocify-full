@@ -1,0 +1,16 @@
+{
+    "name": "modules/localization",
+    "description": "",
+    "authors": [],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Localization\\Providers\\LocalizationServiceProvider"
+            ],
+            "aliases": {}
+        }
+    },
+    "require": {
+        "deeplcom/deepl-php": "^1.0"
+    }
+}

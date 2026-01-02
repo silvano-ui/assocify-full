@@ -7,5 +7,7 @@
     "Documents": true,
     "Newsletter": true,
     "Api": true,
-    "WhiteLabel": true
+    "WhiteLabel": true,
+    "Reports": true,
+    "Localization": true
 }
